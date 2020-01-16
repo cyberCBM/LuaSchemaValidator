@@ -54,14 +54,11 @@ string
 A table schema must contain type and properties to capture all data inside a table.
 
     Data:  abcTable = { aTable = { bBool = true} }
-    Schema: abcTable = { type = "map", properties = 
-    										{  aTable = { type = "map", properties = 
-    											    { bBool = {type = "boolean", default = "true"}
-    											    }
-    									     }
-    									 }
-							
-
+    Schema: abcTable = { type = "map", properties =     									{  aTable = { type = "map", properties =     											    { bBool = {type = "boolean", default = "true"}    							
+    			}
+		}
+	 }
+						
 
 #### array:
 
