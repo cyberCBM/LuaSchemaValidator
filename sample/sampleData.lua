@@ -19,3 +19,36 @@
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
+
+return{
+    version = 1,
+    FileName = "SampleData",
+    FilePath = "/home/user/MasterRepos/LuaValidator/sample/SampleData1",
+    usedInTest = true,
+    testDataArray = {
+        [1] =     {
+            name= "Chaitanya",
+            phone= 123456,
+            address= "16 Long Street",
+            state ="Bangalore"
+        },
+        [2] =     {
+            name= "Suhani",
+            phone= 098765,
+            address= "10 Short Street",
+            state ="Gujarat"
+        },
+    },
+    testDataMap ={
+        noOfData = 3,
+        repeatedData = false
+        dataMap = {
+            name= "Myra",
+            phone= 135790,
+            address= "26 medium Street",
+            state ="Delhi"
+        },
+    },
+    testFun = function () print("test function") end ,
+    testResult = "pass"
+}
