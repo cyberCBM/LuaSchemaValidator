@@ -19,3 +19,83 @@
 -- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
+return {
+    type = "map",
+        properties = {
+            version = {
+                type = "number",
+                required = true,
+            },
+            FileName = {
+                type = "string",
+                required = true,
+            },
+            FilePath = {
+                type = "string"
+            },
+            usedInTest = {
+                type = "boolean"
+            },
+            
+            testDataArray = {
+                type = "Array",
+                items = {
+                    type = "map",
+                    properties = {
+                        name = {
+                            type = "string",
+                            required = true,
+                            },
+                        phone = {
+                            type = "number",
+                            required = true,
+                            },
+                        address = {
+                            type = "string",
+                            },
+                        state = {
+                            type = "stringEnum",
+                        },
+                    }
+                }
+            },
+            testDataMap = {
+                type = "map",
+                properties = {
+                    noOfData = {
+                        type = "numberRange",
+                        min = 1,
+                        max = 10
+                        },
+                    repeatedData ={
+                        type = "boolean",
+                    },
+                    dataMap = {
+                        type = "map",
+                        properties = {
+                            name = {
+                                type = "string",
+                                required = true,
+                                },
+                            phone = {
+                                type = "number",
+                                required = true,
+                                },
+                            address = {
+                                type = "string",
+                                },
+                            state = {
+                                type = "stringEnum",
+                            },
+                        }
+                    }
+                }
+            },
+            testFun = {
+                type = "function"
+            },
+            testResult = {
+                type = "string"
+            },
+        }
+    }
