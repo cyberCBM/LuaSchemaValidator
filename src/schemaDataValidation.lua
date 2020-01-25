@@ -59,6 +59,31 @@ local function error_message(data, expected_type)
     return format(' is missing and should be %s.', expected_type)
 end
 
+--- list validator.
+--
+-- Ensure the value is contained in the given list.
+--
+-- @param list table
+--   Set of allowed values.
+-- @param value mixed
+--   Comparation value.
+--
+-- @return
+--   This validator return value is either true on success or false and
+--   an error message.
+local function inList(value, list)
+    local printed_list = "["
+    for _, word in pairs(list) do
+      if word == value then
+        return true
+      end
+      printed_list = printed_list .. " '" .. word .. "'"
+    end
+
+    printed_list = printed_list .. " ]"
+    return false, { error_message(value, 'in list ' .. printed_list) }
+end
+
 --- A string validator.
 --
 -- @param value
@@ -223,6 +248,21 @@ local function isArray(value, schemaData)
     end
 end
 
+--- function validator.
+--
+-- @param value
+-- value to validate
+-- @return
+--   This validator return value is either true on success or false and
+--   an error message.
+local function isFunction(value, schemaData)
+    if type(value) ~= 'function' then
+        return false, error_message(value, 'a function')
+    else
+        return true
+    end
+end
+
 -- fill all the functions into table for fast function find [better than if/else]
 local validateFunctionTable = {}
 validateFunctionTable["number"] = isNumber
@@ -269,4 +309,8 @@ function validator.validateFromFile(dataTableFile, schemaTableFile)
     --print("dataTable:", dataTable)
     --print("schemaTable:", schemaTable)  
     return validator.validateAgainstSchema(dataTable, schemaTable)
+end
+
+function validator.validateAgainstSchema(tableData, tableSchema)
+    return true
 end
