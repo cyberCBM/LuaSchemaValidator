@@ -312,5 +312,81 @@ function validator.validateFromFile(dataTableFile, schemaTableFile)
 end
 
 function validator.validateAgainstSchema(tableData, tableSchema)
-    return true
+    local result, err
+    local errorTable = {}
+    
+    -- check if data is correct or not ?
+    result, err = isTable(tableData)
+    if result == false then
+        insert(errorTable, "Table data error: " .. err)
+        return false, errorTable
+    end
+    -- check if schema is correct or not?
+    result, err = nil
+    result, err = isTable(tblSchema)
+    if result == false then
+        insert(errorTable, "Schema data error: " .. err)
+        return false, errorTable
+    end
+    
+    -- Get properties and type at this level
+    local tblSchemaProperties = tblSchema.properties
+    local tableType = tblSchema.type  
+    
+    result = true
+    -- The passed type will always be a map as the root is a map and we recurse only for maps, it cant be anything else
+    -- Schema to data check
+    
+    if tableType == "map" then
+        for strKey, tblKeyInfo in pairs(tblSchemaProperties) do
+            local lResult = true
+            local keyType = tblKeyInfo.type
+            local required = false or tblKeyInfo.required 
+            local valueToValidate = tableData[strKey]
+            local msg = nil
+            --print("tblKeyInfo:", tblKeyInfo)
+            local validationfunc  = nil    
+            if valueToValidate == nil then
+                if required then            
+                    -- key has to be there in table or add in error table
+                    result = false
+                    msg = error_message(valueToValidate, 'present')
+                    goto continue
+                else
+                    goto continue
+                end                            
+            end            
+            
+            validationfunc = validateFunctionTable[keyType]
+            if validationfunc == nil then
+                result = false
+                msg = "validateAgainstSchema:" .. valueToValidate .. ": Unrecognized key type: " .. keyType
+                goto continue
+            end
+            
+            -- call validation function
+            lResult, msg = validationfunc(valueToValidate, tblKeyInfo)
+            
+            ::continue::
+            if lResult == false then
+                result = false
+            end
+            -- accumulation messages in error table for accumulation    
+            if msg ~= nil then
+                if type(msg) == 'table' then
+                    for k,v in pairs(msg) do
+                        insert(errorTable, v)
+                    end
+                else
+                    insert(errorTable, strKey .. ":" .. msg)
+                end
+            end
+        end  -- end for     
+    else
+        local msg = "validateAgainstSchema:" .. " Non-map data passed! Type passed is: " .. tableType
+        insert(errorTable, msg)
+        return false, errorTable
+    end
+    
+    return result, errorTable
 end
